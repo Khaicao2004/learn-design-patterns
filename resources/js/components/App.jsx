@@ -6,16 +6,14 @@ const App = () => {
     <div>
         <h1>Hello app</h1>
         <nav>
-            <NavLink to="/">
+            <NavLink to="/" className={( { isActive } ) => (isActive ? 'active' : "")}>
                 Go to Home
             </NavLink>
-            <NavLink to="/about">
-                Go to Home
-            </NavLink>
-            <NavLink to="/*">
-                Go to Home
+            <NavLink to="/about" className={( { isActive } ) => (isActive ? 'active' : "")}>
+                Go to About
             </NavLink>
         </nav>
+        <Router/>
     </div>
   )
 }
