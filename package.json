@@ -12,8 +12,10 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
+        "@inertiajs/inertia-react": "^0.8.1",
+        "@inertiajs/react": "^2.0.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "react-router-dom": "^7.2.0"
     }
 }

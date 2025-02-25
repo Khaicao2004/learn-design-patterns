@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public $userRepository;
-    public function __construct(UserRepositoryInterface $userRepository) {
-        $this->userRepository = $userRepository;
-    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       $data = $this->userRepository->getAllUsers();
-       dd($data);
+        $users = User::all();
+        return Inertia::render('Users/Index', ['users' => $users]);
+        
     }
 
     /**
