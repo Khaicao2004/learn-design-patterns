@@ -12,6 +12,9 @@ const App = () => {
             <NavLink to="/about" className={( { isActive } ) => (isActive ? 'active' : "")}>
                 Go to About
             </NavLink>
+            <NavLink to="/list" className={( { isActive } ) => (isActive ? 'active' : "")}>
+                Go to list
+            </NavLink>
         </nav>
         <Router/>
     </div>
