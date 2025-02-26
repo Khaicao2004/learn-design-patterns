@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from '@inertiajs/react'
+import { Link } from '@inertiajs/inertia-react';
 
 const Index = ({ users }) => {
     return (

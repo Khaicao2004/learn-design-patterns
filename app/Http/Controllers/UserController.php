@@ -23,7 +23,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Users/Create');
     }
 
     /**
@@ -31,7 +31,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        User::query()->create($request->all());
+        return redirect()->route('users.index');
     }
 
     /**
