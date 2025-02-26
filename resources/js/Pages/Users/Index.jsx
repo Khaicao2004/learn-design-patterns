@@ -16,6 +16,7 @@ const Index = ({ users }) => {
                         <th>STT</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +30,9 @@ const Index = ({ users }) => {
                                 <td>{index + 1}</td>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
-
+                                <td>
+                                    <Link as='button' type='button' href={`/users/${user.id}/edit`}>Edit</Link>
+                                </td>
                             </tr>
                         ))
                         )

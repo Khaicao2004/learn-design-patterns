@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -29,10 +30,14 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        User::query()->create($request->all());
-        return redirect()->route('users.index');
+        try {
+            User::query()->create($request->all());
+            return redirect()->route('users.index')->with('success', 'Thanh cong');
+        } catch (\Exception $e) {
+            return back()->with('Loi xay ra', $e->getMessage());
+        }
     }
 
     /**
@@ -48,7 +53,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return Inertia::render('Users/Edit', ['user' => $user]);
     }
 
     /**
