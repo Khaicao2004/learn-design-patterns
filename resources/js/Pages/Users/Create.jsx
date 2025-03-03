@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
+import { route } from 'ziggy-js';
 
 
 const Create = () => {
@@ -17,7 +18,7 @@ const Create = () => {
   return (
     <div>
         <h1 style={{ textAlign: 'center'}}>Create</h1>
-        <Link as='button' type='button' href='/users' style={{ marginBottom: 10 }}>Back to list</Link>
+        <Link as='button' type='button' href={route('users.index')} style={{ marginBottom: 10 }}>Back to list</Link>
         <form onSubmit={submitForm}>
             <label>Name:</label>
             <input type="text" name='name' value={name} onChange={(e) => setName(e.target.value)} placeholder='Nhap name'/>
