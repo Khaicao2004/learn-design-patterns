@@ -34,10 +34,10 @@ const Index = ({ users }) => {
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>
-                                    <Link as='button' type='button' href={route('users.edit', user.id)}>Edit</Link>
+                                    <Link as='button' type='button' href={route('users.edit', { id: user.id })}>Edit</Link>
                                 </td>
                                 <td>
-                                    <Link as='button' type='button' method='delete' href={route('users.destroy', user.id)}>Delete</Link>
+                                    <Link as='button' type='button' method='delete' href={route('users.destroy', { id: user.id })}>Delete</Link>
                                 </td>
                             </tr>
                         ))

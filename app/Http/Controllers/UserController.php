@@ -3,20 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::all();
-        return Inertia::render('Users/Index', ['users' => $users]);
-        
+        $users = $this->userService->getAllUsers();
+        return view('users/index', compact('users'));
     }
 
     /**
@@ -24,7 +31,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Users/Create');
+        return view('users.create');
     }
 
     /**
@@ -32,12 +39,10 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        try {
-            User::query()->create($request->all());
-            return redirect()->route('users.index')->with('success', 'Thanh cong');
-        } catch (\Exception $e) {
-            return back()->with('Loi xay ra', $e->getMessage());
-        }
+       $data = $request->all();
+       $password = $data['password'];
+       $this->userService->createUser($data, $password);
+       return redirect()->route('users.index');
     }
 
     /**
@@ -45,7 +50,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = $this->userService->findById($id);
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -53,18 +59,18 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::findOrFail($id);
-        return Inertia::render('Users/Edit', ['user' => $user]);
+        $user = $this->userService->findById($id);
+        return view('users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
-        $user = User::findOrFail($id);
-        $user->update($request->all());
-        return redirect()->route('users.index');
+        $data = $request->all();
+        $this->userService->updateUser($id, $data);
+        return back();
     }
 
     /**
@@ -72,8 +78,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-       $user = User::findOrFail($id);
-       $user->delete();
-       return redirect()->route('users.index');
+        $this->userService->deleteUser($id);
+        return back();
     }
 }

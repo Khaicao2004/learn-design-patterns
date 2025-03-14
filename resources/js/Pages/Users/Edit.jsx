@@ -9,7 +9,7 @@ const Edit = ({user}) => {
     const submitForm = (e) => {
         e.preventDefault();
         const formData = {name, email};
-        Inertia.put(`/users/${user.id}`, formData);
+        Inertia.put(route('users.update', { id: user.id }), formData);
     }
   return (
     <div>
