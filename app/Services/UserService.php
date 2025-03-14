@@ -5,9 +5,10 @@ namespace App\Services;
 use App\Mail\CreateUserEmail;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Support\Facades\Mail;
 
-class UserService
+class UserService implements UserServiceInterface
 {
     protected $userRepository;
 
@@ -16,29 +17,13 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function getAllUsers()
+    public function sendMailToUser($user, $password)
     {
-        return $this->userRepository->getAllUsers();
-    }
-
-    public function findById($id)
-    {
-        return $this->userRepository->findById($id);
-    }
-
-    public function createUser($data, $password)
-    {
-        $user = $this->userRepository->createUser($data);
         Mail::to($user->email)->send(new CreateUserEmail($user, $password));
     }
-
-    public function updateUser($id, $data)
+   
+    public function paginate()
     {
-        return $this->userRepository->updateUser($id, $data);
-    }
-
-    public function deleteUser($id)
-    {
-        return $this->userRepository->deleteUser($id);
+        return $this->userRepository->getAllPaginate();
     }
 }

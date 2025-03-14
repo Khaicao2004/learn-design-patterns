@@ -5,9 +5,11 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class CreateUserEmail extends Mailable
 {
@@ -54,6 +56,11 @@ class CreateUserEmail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+        if (!empty($this->user->avatar)) {
+            $extension = pathinfo($this->user->avatar, PATHINFO_EXTENSION);
+            $attachments[] = Attachment::fromPath(Storage::path($this->user->avatar))->as('image_info.' . $extension);
+        }
+        return $attachments;
     }
 }

@@ -6,7 +6,7 @@
 
 @section('content')
 <h1>Create</h1>
-    <form action="{{ route('users.store') }}" method="POST">
+    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="">
             <label for="">Name</label>
@@ -19,6 +19,10 @@
         <div class="">
             <label for="">Password</label>
             <input type="text" name="password" placeholder="nhap password">
+        </div>
+        <div class="">
+            <label for="">Image</label>
+           <input type="file" name="avatar" id="">
         </div>
         <button type="submit">Submit</button>
     </form>

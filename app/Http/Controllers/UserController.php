@@ -5,25 +5,31 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    const VIEW_TEMPLATE = 'users.';
+    const UPLOAD = 'uploads/users';
     protected $userService;
+    protected $userRepository;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, UserRepositoryInterface $userRepository)
     {
         $this->userService = $userService;
+        $this->userRepository = $userRepository;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = $this->userService->getAllUsers();
-        return view('users/index', compact('users'));
+        $users = $this->userRepository->all(['id', 'name', 'email', 'avatar'],['posts']);
+        return view(self::VIEW_TEMPLATE . __FUNCTION__, compact('users'));
     }
 
     /**
@@ -31,7 +37,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        return view(self::VIEW_TEMPLATE . __FUNCTION__);
     }
 
     /**
@@ -39,9 +45,13 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-       $data = $request->all();
+       $data = $request->except('avatar');
        $password = $data['password'];
-       $this->userService->createUser($data, $password);
+       if($request->has('avatar')){
+           $data['avatar'] = Storage::put(self::UPLOAD, $request->file('avatar'));
+       }
+       $user = $this->userRepository->create($data);
+       $this->userService->sendMailToUser($user, $password);
        return redirect()->route('users.index');
     }
 
@@ -50,8 +60,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = $this->userService->findById($id);
-        return view('users.show', compact('user'));
+        $user = $this->userRepository->findById($id, ['name', 'email'], ['posts']);
+        return view(self::VIEW_TEMPLATE . __FUNCTION__, compact('user'));
     }
 
     /**
@@ -59,8 +69,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = $this->userService->findById($id);
-        return view('users.edit', compact('user'));
+        $user = $this->userRepository->findById($id);
+        return view(self::VIEW_TEMPLATE . __FUNCTION__, compact('user'));
     }
 
     /**
@@ -69,7 +79,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, string $id)
     {
         $data = $request->all();
-        $this->userService->updateUser($id, $data);
+        $this->userRepository->update($id, $data);
         return back();
     }
 
@@ -78,7 +88,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->userService->deleteUser($id);
+        $this->userRepository->delete($id);
         return back();
     }
 }
