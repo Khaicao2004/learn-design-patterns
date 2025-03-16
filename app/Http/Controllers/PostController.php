@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Repositories\Interfaces\PostRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     const VIEW_TEMPLATE = 'posts.';
+    const UPLOAD = 'uploads/posts';
 
     protected $postRepository;
     public function __construct(PostRepositoryInterface $postRepository) {
@@ -28,7 +30,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view(self::VIEW_TEMPLATE . __FUNCTION__);
     }
 
     /**
@@ -36,7 +38,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->except('image');
+        if($request->has('image')){
+            $data['image'] = Storage::put(self::UPLOAD, $request->file('image'));
+        }
+        $this->postRepository->create($data);
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -44,7 +51,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view(self::VIEW_TEMPLATE . __FUNCTION__);
     }
 
     /**
@@ -52,7 +59,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view(self::VIEW_TEMPLATE . __FUNCTION__, compact('post'));
     }
 
     /**
@@ -60,7 +67,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        
     }
 
     /**
