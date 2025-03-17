@@ -5,10 +5,10 @@
 @endsection
 
 @section('content')
-    <h1 style="text-align: center;">List users</h1>
-   <div style="padding: 20px">
-        <a href="{{ route('users.create') }}" style="padding: 5px; background-color: green;">Create</a>
-        <table style="margin-top: 10px; border: 1px solid black; width: 100%; text-align: center;">
+    <h1 class="text-center">List users</h1>
+   <div class="p-5">
+        <a href="{{ route('users.create') }}" class="bg-primary text-dark p-2">Create</a>
+        <table class="table table-bordered text-center mt-2">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -25,8 +25,8 @@
                         <td>{{ $user->email }}</td>
                         <td>
                            <div style="display: flex; justify-content: space-between">
-                                <a href="{{ route('users.show', $user->id) }}">Show</a>
-                                <a href="{{ route('users.edit', $user->id) }}">Edit</a>
+                                <a href="{{ route('users.show', $user->id) }}" class="bg-warning">Show</a>
+                                <a href="{{ route('users.edit', $user->id) }}" class="bg-warning">Edit</a>
                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')

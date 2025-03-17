@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Repositories\Interfaces\PostRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +31,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view(self::VIEW_TEMPLATE . __FUNCTION__);
+        $users = User::all();
+        return view(self::VIEW_TEMPLATE . __FUNCTION__, compact('users'));
     }
 
     /**
@@ -42,7 +44,11 @@ class PostController extends Controller
         if($request->has('image')){
             $data['image'] = Storage::put(self::UPLOAD, $request->file('image'));
         }
-        $this->postRepository->create($data);
+        $users = $request->user_id;
+        $post = $this->postRepository->create($data);
+        if($post){
+            $post->users()->sync($users);
+        }
         return redirect()->route('posts.index');
     }
 
@@ -67,7 +73,16 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        
+        $data = $request->except('image');
+        $oldImage = $post->image;
+        if($request->has('image')){
+            $data['image'] = Storage::put(self::UPLOAD, $request->file('image'));
+        }
+        $this->postRepository->update($post->id, $data);
+        if($oldImage && Storage::exists($oldImage)){
+            Storage::delete($oldImage);
+        }
+        return back();
     }
 
     /**

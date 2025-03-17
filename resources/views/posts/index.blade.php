@@ -6,10 +6,10 @@
 @endsection
 
 @section('content')
-    <h1>Danh sach bai viet</h1>
-    <div style="padding: 20px">
-        <a href="{{ route('posts.create') }}" style="padding: 5px; background-color: green;">Create</a>
-        <table style="margin-top: 10px; border: 1px solid black; width: 100%; text-align: center;">
+    <h1 class="text-center">Danh sach bai viet</h1>
+    <div class="p-5">
+        <a href="{{ route('posts.create') }}" class="bg-primary text-dark p-2 text-decoration-none">Create</a>
+        <table class="table table-bordered text-center mt-2">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -36,9 +36,9 @@
                         </td>
                         <td>{{ Str::limit($post->content, 50) }}</td>
                         <td>
-                            <div style="display: flex; justify-content: space-between">
-                                <a href="{{ route('posts.show', $post->id) }}">Show</a>
-                                <a href="{{ route('posts.edit', $post->id) }}">Edit</a>
+                            <div class="d-flex gap-4">
+                                <a href="{{ route('posts.show', $post->id) }}" class="bg-primary p-2 text-dark text-decoration-none">Show</a>
+                                <a href="{{ route('posts.edit', $post->id) }}" class="bg-warning p-2 text-dark text-decoration-none">Edit</a>
                                 <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')

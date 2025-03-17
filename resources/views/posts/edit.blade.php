@@ -5,9 +5,10 @@
 @endsection
 
 @section('content')
-    <h1>Them moi bai viet</h1>
+    <h1 class="text-center">Them moi bai viet</h1>
     <form action="{{ route('posts.update', $post) }}" method="post" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div>
             <label for="">Title</label>
             <input type="text" name="title" id="" value="{{ $post->title }}">

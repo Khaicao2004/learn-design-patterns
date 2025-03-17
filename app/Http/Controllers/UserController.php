@@ -79,7 +79,15 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, string $id)
     {
         $data = $request->all();
-        $this->userRepository->update($id, $data);
+        $user = $this->userRepository->findById($id);
+        $oldAvatar = $user->avatar;
+        if($request->has('avatar')){
+            $data['avatar'] = Storage::put(self::UPLOAD, $request->file('avatar'));
+        }
+        $this->userRepository->update($user->id, $data);
+        if($oldAvatar && Storage::exists($oldAvatar)){
+                   Storage::delete($oldAvatar);
+        }
         return back();
     }
 

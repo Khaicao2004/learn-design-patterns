@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,9 @@ Route::get('/', function(){
     return 111;
 });
 
+// Authentication
+Route::get('auth/login', [AuthController::class, 'formLogin'])->name('auth.login');
+Route::post('auth/login', [AuthController::class, 'login']);
 
 // CRUD users
 Route::get('users', [UserController::class, 'index'])->name('users.index');
