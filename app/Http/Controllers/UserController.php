@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userRepository->all(['id', 'name', 'email', 'avatar'],['posts']);
+        $users = $this->userService->paginate();
         return view(self::VIEW_TEMPLATE . __FUNCTION__, compact('users'));
     }
 

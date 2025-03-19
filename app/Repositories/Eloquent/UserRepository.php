@@ -15,6 +15,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
     public function getAllPaginate()
     {
-        return User::query()->latest('id')->paginate(15);
+        return User::query()->latest('id')->paginate(5);
     }
 }

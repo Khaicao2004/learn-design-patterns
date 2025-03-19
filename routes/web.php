@@ -20,6 +20,10 @@ Route::get('/', function(){
     return 111;
 });
 
+Route::get('public', function(){
+    return view('public');
+});
+
 // Authentication
 Route::get('auth/login', [AuthController::class, 'formLogin'])->name('auth.login');
 Route::post('auth/login', [AuthController::class, 'login']);

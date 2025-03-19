@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Repositories\Interfaces\PostRepositoryInterface;
+use App\Services\PostServive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,15 +15,17 @@ class PostController extends Controller
     const UPLOAD = 'uploads/posts';
 
     protected $postRepository;
-    public function __construct(PostRepositoryInterface $postRepository) {
+    protected $postServive;
+    public function __construct(PostServive $postServive,PostRepositoryInterface $postRepository) {
         $this->postRepository = $postRepository;
+        $this->postServive = $postServive;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $posts = $this->postRepository->all(['*'], ['users']);
+        $posts = $this->postServive->paginate();
         return view(self::VIEW_TEMPLATE . __FUNCTION__, compact('posts'));
     }
 
@@ -90,6 +93,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $this->postRepository->delete($post->id);
+        return back();
     }
 }

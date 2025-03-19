@@ -13,4 +13,8 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     {
         $this->model = $model;
     }
+    public function getAllPaginate()
+    {
+        return Post::query()->latest('id')->paginate(5);
+    }
 }
