@@ -17,7 +17,7 @@ class VoucherController extends Controller
             'discount' => $request->discount,
         ]);
 
-        broadcast(new VoucherCreated($voucher));
+        broadcast(new VoucherCreated($voucher))->toOthers();
 
         return response()->json(['message' => 'Them voucher thanh cong']);
     }
