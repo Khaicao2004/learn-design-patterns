@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserRegistered;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
@@ -45,14 +46,14 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-       $data = $request->except('avatar');
-       $password = $data['password'];
-       if($request->has('avatar')){
-           $data['avatar'] = Storage::put(self::UPLOAD, $request->file('avatar'));
-       }
-       $user = $this->userRepository->create($data);
-       $this->userService->sendMailToUser($user, $password);
-       return redirect()->route('users.index');
+        $data = $request->except('avatar');
+        $password = $data['password'];
+        if($request->has('avatar')){
+            $data['avatar'] = Storage::put(self::UPLOAD, $request->file('avatar'));
+        }
+        $user = $this->userRepository->create($data);
+        event(new UserRegistered($user, $password));
+        return redirect()->route('users.index');
     }
 
     /**

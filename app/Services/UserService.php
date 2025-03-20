@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Jobs\SendMailToUser;
+use App\Mail\CreateUserEmail;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\Interfaces\UserServiceInterface;
+use Illuminate\Support\Facades\Mail;
 
 class UserService implements UserServiceInterface
 {
@@ -17,7 +18,7 @@ class UserService implements UserServiceInterface
 
     public function sendMailToUser($user, $password)
     {
-        SendMailToUser::dispatch($user, $password);
+        Mail::to($user->email)->send(new CreateUserEmail($user, $password));
     }
    
     public function paginate()
