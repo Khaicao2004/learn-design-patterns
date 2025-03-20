@@ -2,6 +2,6 @@
 
 namespace App\Repositories\Interfaces;
 
-interface UserRepositoryInterface{
-    public function getAllUsers();
+interface UserRepositoryInterface extends BaseRepositoryInterface{
+    public function getAllPaginate();
 }

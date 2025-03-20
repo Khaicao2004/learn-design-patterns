@@ -1,13 +1,13 @@
 import './bootstrap';
 
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { createInertiaApp } from '@inertiajs/inertia-react';
+import { createRoot } from 'react-dom/client';
 
-import App from './components/App';
-
-ReactDOM.createRoot(document.getElementById('app')).render(
-    <BrowserRouter>
-        <App/>
-    </BrowserRouter>
-)
+createInertiaApp({
+    resolve: name => import(`./Pages/${name}`),
+    setup({ el, App, props }) {
+        const root = createRoot(el); // Tạo root mới
+        root.render(<App {...props} />); // Render component vào root
+    }
+})  
