@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,14 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function(){
-    return 111;
+Route::get('/', function () {
+    return view('welcome');
 });
 
 Route::get('public', function(){
     return view('public');
 });
 
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 //Message
 Route::get('chat', [ChatController::class, 'index'])->name('chat.index');
-Route::get('chat/{id}', [ChatController::class, 'show'])->name('chat.show');
+Route::post('chat', [ChatController::class, 'postMessage'])->name('chat.postMessage');

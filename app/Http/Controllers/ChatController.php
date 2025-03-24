@@ -9,12 +9,13 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        return view('chat-realtime', compact('users'));
+        $users = User::query()->latest('id')->get();
+        return view('chat.chat-public', compact('users'));
     }
-    public function show($id)
+    public function postMessage(Request $request)
     {
-        $user = User::findOrFail($id);
-        dd($user);
+       return json_encode([
+        'data' => $request->message
+       ]);
     }
 }
