@@ -11,6 +11,8 @@
             padding: 15px;
             display: block;
             position: relative;
+            text-decoration: none;
+            color: black
         }
         .item a:hover{
             color: white;
@@ -40,7 +42,7 @@
                 <div class="row border">
                     @foreach ($users as $user)
                         <div class="col-md-12 item mt-3">
-                            <a id="link-{{ $user->id }}">
+                            <a href="{{ route('chat.chatPrivate', $user->id) }}" id="link-{{ $user->id }}">
                                 <img src="{{ Str::contains($user->avatar, 'http') ? $user->avatar : Storage::url($user->avatar) }}" alt="">
                                 <p>{{ $user->name }}</p>
                             </a>
@@ -94,22 +96,27 @@
             if(statusElement){
                 element.removeChild(statusElement);
             }
-    }).listen('UserOnline', event => {
-
+    }).listen('UserOnline', e => {
+        let messages = document.querySelector("#messages");
+        let itemElement = document.createElement("li");
+        itemElement.textContent = `${e.user.name}: ${e.message}`;
+        if(e.user.id == "{{ Auth::id() }}"){
+            itemElement.classList.add("my-message");
+        }
+        messages.appendChild(itemElement);
     })
 
     let btnSent = document.querySelector("#send");
-    let message = document.querySelector("#message")
+    let message = document.querySelector("#message");
 
     btnSent.addEventListener('click', function(e) {
         e.preventDefault();
         axios.post('{{ route("chat.postMessage") }}', 
             {
-            'message': message.value
+            message: message.value
             }
-    ).then(data => {
-            console.log(data.data);
-            
+        ).then(data => {
+            message.value = '';
         })
         
     })
