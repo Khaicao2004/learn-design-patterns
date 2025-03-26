@@ -39,5 +39,5 @@ Route::middleware('auth_check')->group(function() {
     Route::post('group/create', [HomeController::class, 'createGroup'])->name('group.createGroup');
     Route::get('group-chat/{groupId}', [HomeController::class, 'chatGroup'])->name('group.chatGroup');
     Route::post('post-message-group', [HomeController::class, 'postMessageGroup'])->name('chat.postMessageGroup');
-
+    Route::get('private-chat/{receiverId}/messages', [ChatController::class, 'getPrivateMessages'])->name('private.getPrivateMessages');
 });

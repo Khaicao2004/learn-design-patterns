@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ChatPrivate;
 use App\Events\UserOnline;
+use App\Models\ChatPrivate as ModelsChatPrivate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,6 @@ class ChatController extends Controller
     public function postMessage(Request $request)
     {
         broadcast(new UserOnline($request->user(), $request->message));
-        // event(new UserOnline($request->user(), $request->message));
         return response()->json('successfully');
     }
     public function chatPrivate($userId)
@@ -28,8 +28,29 @@ class ChatController extends Controller
     }
     public function postMessagePrivate($userId, Request $request)
     {
-        $user = User::findOrFail($userId); // id nguoi nhan
-        broadcast(new ChatPrivate($request->user(), $user, $request->message));
+        $sendUser = $request->user();
+        $userReceiver = User::findOrFail($userId); // id nguoi nhan
+        $messages = ModelsChatPrivate::query()->create([
+            'sender_id' =>  $sendUser->id,
+            'receiver_id' =>  $userReceiver->id,
+            'content' => $request->message
+        ]);
+        broadcast(new ChatPrivate($sendUser,$userReceiver,  $messages->content));
         return response()->json('successfully');
+    }
+    public function getPrivateMessages(Request $request, $receiverId)
+    {
+        $userSendId =$request->user()->id;
+        $messages = ModelsChatPrivate::with('sender')->where(function ($query) use ($userSendId, $receiverId) {
+            $query->where('sender_id', $userSendId)
+                  ->where('receiver_id', $receiverId);
+        })
+        ->orWhere(function ($query) use ($userSendId, $receiverId) {
+            $query->where('sender_id', $receiverId)
+                  ->where('receiver_id', $userSendId);
+        })
+        ->orderBy('created_at', 'asc')
+        ->get();
+        return response()->json($messages);
     }
 }

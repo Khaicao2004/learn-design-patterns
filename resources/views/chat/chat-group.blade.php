@@ -65,9 +65,7 @@
             </div>
             <div class="col-md-9">
                 <div class="row border">
-                    <ul id="messages" class="list-unstyled overflow-auto" style="min-height: 40vh">
-
-                    </ul>
+                    <ul id="messages" class="list-unstyled overflow-auto" style="min-height: 40vh"></ul>
                     <form class="border-top">
                         <div class="row py-3">
                             <div class="col-10">
@@ -135,19 +133,42 @@
     </script>
 
     <script type="module">
+        document.addEventListener("DOMContentLoaded", function() {
+            axios.get('{{ route('group.getGroupMessages', $group->id) }}')
+                .then(response => {
+                    let messages = document.querySelector("#messages");
+                    messages.innerHTML = '';
+
+                    response.data.forEach(message => {
+                        addMessageToList(message);
+                    });
+                })
+                .catch(error => {
+                    console.error("Lỗi khi lấy tin nhắn:", error);
+                });
+        });
         window.Echo.private('chat-group.{{ $group->id }}')
             .listen('ChatGroup', e => {
-                let messages = document.querySelector("#messages");
-                let itemElement = document.createElement("li");
-                if (e.group.leader_id === e.user.id) {
-                    itemElement.textContent = `Leader ~ ${e.user.name}: ${e.message}`;
-                } else {
-                    itemElement.textContent = `${e.user.name}: ${e.message}`;
-                }
-                if (e.user.id == "{{ Auth::id() }}") {
-                    itemElement.classList.add("my-message");
-                }
-                messages.appendChild(itemElement);
+                addMessageToList({
+                    sender: {
+                        name: e.user.name
+                    },
+                    content: e.message,
+                    sender_id: e.user.id
+                });
             })
+
+        function addMessageToList(message) {
+            let messages = document.querySelector("#messages");
+            let itemElement = document.createElement("li");
+
+            itemElement.textContent = `${message.sender.name}: ${message.content}`;
+
+            if (message.sender_id == "{{ Auth::id() }}") {
+                itemElement.classList.add("my-message");
+            }
+
+            messages.appendChild(itemElement);
+        }
     </script>
 @endsection

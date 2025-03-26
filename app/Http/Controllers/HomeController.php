@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ChatGroup;
 use App\Models\Group;
 use App\Models\GroupDetail;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,13 +58,20 @@ class HomeController extends Controller
         $leader = User::findOrFail($group->leader_id);
         $member_id = GroupDetail::where('group_id', $group->id)->pluck('member_id')->toArray();
         $members = User::whereIn('id', $member_id)->get();
-        return view('chat.chat-group', compact('leader', 'group', 'members'));
+        $messages = Message::where('group_id', $group->id)->with('sender')->orderByDesc('created_at')->get();
+        return view('chat.chat-group', compact('leader', 'group', 'members', 'messages'));
     }
 
     public function postMessageGroup(Request $request)
     {
         $group = Group::findOrFail($request->groupId);
-        broadcast(new ChatGroup($group, $request->user(), $request->message));
+        $user = $request->user();
+        $message = Message::query()->create([
+            'group_id' => $group->id,
+            'sender_id' => $user->id,
+            'content' => $request->message,
+        ]);
+        broadcast(new ChatGroup($group, $user, $message->content));
         return response()->json('successfully');
     }
 }
