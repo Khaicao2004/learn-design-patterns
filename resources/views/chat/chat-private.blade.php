@@ -38,6 +38,7 @@
             color: blue;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 @endsection
 @section('content')
     <div class="container">
@@ -60,6 +61,12 @@
                     </ul>
                     <form class="border-top">
                         <div class="row py-3">
+                            {{-- <div class="col-1 d-flex align-items-center justify-content-center">
+                                <button class="btn btn-light" id="upload-btn">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                </button>
+                                <input type="file" id="file-input" class="d-none">
+                            </div> --}}
                             <div class="col-10">
                                 <input type="text" id="message" class="form-control">
                             </div>
@@ -120,7 +127,7 @@
                 .then(response => {
                     let messages = document.querySelector("#messages");
                     messages.innerHTML = '';
-                    response.data.forEach(message => {  
+                    response.data.forEach(message => {
                         addMessageToList({
                             sender_id: message.sender_id,
                             sender: {
@@ -136,7 +143,7 @@
         });
         window.Echo.private('chat-private.{{ Auth::id() }}.{{ $user->id }}')
             .listen('ChatPrivate', (e) => {
-                
+
                 addMessageToList({
                     sender_id: e.userSend.id,
                     sender: {
@@ -169,5 +176,8 @@
 
             messages.appendChild(itemElement);
         }
+        // document.getElementById('upload-btn').addEventListener('click', function() {
+        //     document.getElementById('file-input').click();
+        // });
     </script>
 @endsection

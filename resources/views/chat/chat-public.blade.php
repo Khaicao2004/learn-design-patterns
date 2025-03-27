@@ -77,7 +77,7 @@
     .here(users => {
         users.forEach(item => {
             let element = document.querySelector(`#link-${item.id}`);
-            let statusElement = document.createElement("div");
+            let statusElement = 
             statusElement.classList.add('status');
             if(element){
                 element.appendChild(statusElement);

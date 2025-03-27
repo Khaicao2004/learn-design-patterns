@@ -14,7 +14,7 @@ class ChatController extends Controller
     public function index()
     {
         $users = User::query()->where('id', '<>', Auth::id())->latest('id')->get();
-        return view('chat.chat-public', compact('users'));
+        return view('chat.chat-application', compact('users'));
     }
     public function postMessage(Request $request)
     {
@@ -23,8 +23,9 @@ class ChatController extends Controller
     }
     public function chatPrivate($userId)
     {
+        $users = User::query()->where('id', '<>', Auth::id())->latest('id')->get();
         $user = User::findOrFail($userId); // id nguoi nhan
-        return view('chat.chat-private', compact('user'));
+        return view('chat.chat-application', compact('user', 'users'));
     }
     public function postMessagePrivate($userId, Request $request)
     {
