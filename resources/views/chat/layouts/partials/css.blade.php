@@ -142,5 +142,8 @@
     .header a{
         text-decoration: none
     }
+    .sidebar-list .sidebar-item.active{
+        background-color: rgb(191, 191, 191);
+    }
 </style>
 @yield('style')

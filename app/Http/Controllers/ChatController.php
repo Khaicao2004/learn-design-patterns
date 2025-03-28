@@ -13,8 +13,18 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $users = User::query()->where('id', '<>', Auth::id())->latest('id')->get();
-        return view('chat.chat-application', compact('users'));
+        $allUsers = User::query()->where('id', '<>', Auth::id())->latest('id')->get();
+        $lastMessage = ModelsChatPrivate::where('sender_id', Auth::id())
+        ->orWhere('receiver_id', Auth::id())
+        ->latest()
+        ->first();
+        if($lastMessage){
+            $lastChatUserId = ($lastMessage->sender_id == Auth::id()) ? $lastMessage->receiver_id : $lastMessage->sender_id;
+            $userReceiver = User::findOrFail($lastChatUserId);
+        }else{
+            $userReceiver = User::first();
+        }
+        return view('chat.chat-application', compact('allUsers', 'userReceiver'));
     }
     public function postMessage(Request $request)
     {
@@ -23,9 +33,9 @@ class ChatController extends Controller
     }
     public function chatPrivate($userId)
     {
-        $users = User::query()->where('id', '<>', Auth::id())->latest('id')->get();
-        $user = User::findOrFail($userId); // id nguoi nhan
-        return view('chat.chat-application', compact('user', 'users'));
+        $allUsers = User::query()->where('id', '<>', Auth::id())->latest('id')->get();
+        $userReceiver = User::findOrFail($userId); // id nguoi nhan
+        return view('chat.chat-application', compact('allUsers', 'userReceiver'));
     }
     public function postMessagePrivate($userId, Request $request)
     {

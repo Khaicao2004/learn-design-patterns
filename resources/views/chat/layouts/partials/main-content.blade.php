@@ -1,13 +1,13 @@
 <div class="col-9 main-content border d-flex flex-column">
-    @if ($user != null)
+    @if ($userReceiver != null)
         <div class="row main-content-top p-3 border">
             <div class="d-flex align-items-center justify-content-between w-100">
                 <!-- Thông tin người dùng -->
                 <div class="d-flex align-items-center">
-                    <img src="{{ Str::contains($user->avatar, 'http') ? $user->avatar : Storage::url($user->avatar) }}"
+                    <img src="{{ Str::contains($userReceiver->avatar, 'http') ? $userReceiver->avatar : Storage::url($userReceiver->avatar) }}"
                         alt="User Avatar" width="45" height="45" class="rounded-circle me-3" />
                     <div>
-                        <h6 class="mb-0">{{ $user->name }}</h6>
+                        <h6 class="mb-0">{{ $userReceiver->name }}</h6>
                         <p class="text-success small mb-0">
                             Active now
                         </p>
@@ -26,38 +26,13 @@
             </div>
         </div>
         <div class="row main-content-mid flex-grow-1 overflow-auto p-3">
-            <div class="d-flex flex-column gap-3">
-                <!-- Tin nhắn từ người gửi -->
-                <div class="d-flex justify-content-start">
-                    <div class="p-2 bg-light border rounded" style="max-width: 75%">
-                        Xin chào!
-                    </div>
-                </div>
-
-                <!-- Tin nhắn từ bản thân -->
-                <div class="d-flex justify-content-end">
-                    <div class="p-2 bg-primary text-white border rounded" style="max-width: 75%">
-                        Chào bạn!
-                    </div>
-                </div>
-
-                <!-- Tin nhắn từ bản thân -->
-                <div class="d-flex justify-content-end">
-                    <div class="p-2 bg-primary text-white border rounded" style="max-width: 75%">
-                        Chào bạn!
-                    </div>
-                </div>
-                <!-- Tin nhắn khác -->
-                <div class="d-flex justify-content-start">
-                    <div class="p-2 bg-light border rounded" style="max-width: 75%">
-                        Bạn khỏe không?
-                    </div>
-                </div>
+            <div class="d-flex flex-column gap-3" id="messages">
+                <!-- Chứa tin nhắn -->
             </div>
         </div>
 
         <div class="row main-content-bot p-3 border">
-            <form action="">
+            <form id="chat-form">
                 <div class="d-flex align-items-center gap-2 w-100">
                     <!-- Icon đính kèm file -->
                     <button class="btn btn-light border rounded-circle btn-circle" title="Đính kèm file">

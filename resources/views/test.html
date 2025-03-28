@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex justify-center items-center h-screen bg-gray-100">
+
+    <div class="w-96 bg-white shadow-lg rounded-lg flex flex-col">
+        <!-- Danh sách tin nhắn -->
+        <div id="messages" class="h-80 overflow-auto p-4 border-b flex flex-col-reverse">
+            <div class="p-2 bg-gray-200 my-1 rounded">Tin nhắn mới nhất</div>
+            <div class="p-2 bg-gray-200 my-1 rounded">Tin nhắn 2</div>
+            <div class="p-2 bg-gray-200 my-1 rounded">Tin nhắn 3</div>
+        </div>
+
+        <!-- Nút có tin nhắn mới -->
+        <button id="newMessageBtn" 
+            onclick="scrollToBottom()" 
+            class="hidden fixed bottom-10 right-5 bg-blue-500 text-white px-4 py-2 rounded shadow-lg">
+            📩 Có tin nhắn mới
+        </button>
+
+        <!-- Khu vực nhập tin nhắn -->
+        <div class="p-4 flex">
+            <input id="messageInput" type="text" class="flex-grow border p-2 rounded" placeholder="Nhập tin nhắn...">
+            <button onclick="sendMessage()" class="ml-2 bg-green-500 text-white px-4 py-2 rounded">Gửi</button>
+        </div>
+    </div>
+
+    <script>
+        let chatContainer = document.getElementById("messages");
+        let newMessageBtn = document.getElementById("newMessageBtn");
+        let isUserScrollingUp = false;
+
+        // Theo dõi sự kiện cuộn
+        chatContainer.addEventListener("scroll", function() {
+            if (chatContainer.scrollTop < chatContainer.scrollHeight - chatContainer.clientHeight - 10) {
+                isUserScrollingUp = true;
+                newMessageBtn.classList.remove("hidden");
+            } else {
+                isUserScrollingUp = false;
+                newMessageBtn.classList.add("hidden");
+            }
+        });
+
+        // Hàm gửi tin nhắn
+        function sendMessage() {
+            let input = document.getElementById("messageInput");
+            if (input.value.trim() === "") return;
+
+            let messageWrapper = document.createElement("div");
+            messageWrapper.textContent = input.value;
+            messageWrapper.className = "p-2 bg-green-200 my-1 rounded self-end";
+            
+            chatContainer.prepend(messageWrapper);
+
+            input.value = "";
+
+            if (!isUserScrollingUp) {
+                setTimeout(scrollToBottom, 100);
+            }
+        }
+
+        // Cuộn xuống cuối danh sách tin nhắn và ẩn nút ngay lập tức
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Đảm bảo giao diện cập nhật ngay lập tức
+            requestAnimationFrame(() => {
+                newMessageBtn.classList.add("hidden");
+            });
+        }
+
+        // Mặc định cuộn xuống cuối khi load trang
+        window.onload = function() {
+            scrollToBottom();
+        };
+    </script>
+
+</body>
+</html>
