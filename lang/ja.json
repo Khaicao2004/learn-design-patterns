@@ -1,0 +1,21 @@
+{
+    "Hello": "こんにちは",
+    "Name": "お名前",
+    "Login": "ログイン",
+    "Register": "登録",
+    "Logout": "ログアウト",
+    "Email Address": "メールアドレス",
+    "Password": "パスワード",
+    "Remember Me": "ログイン情報を記憶する",
+    "Forgot Your Password?": "パスワードを忘れた?",
+    "Confirm Password": "パスワードを確認",
+    "Dashboard":"ダッシュボード",
+    "You are logged in!":"ログインしました！",
+    "Create Group": "グループを作成",
+    "Group name": "グループ名",
+    "Leader Group": "リーダーグループ",
+    "Member Group": "メンバーグループ",
+    "Close": "閉じる",
+    "Your team": "あなたのチーム",
+    "Group you are a member of": "あなたがメンバーになっているグループ"
+}

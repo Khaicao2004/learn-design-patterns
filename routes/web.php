@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +27,7 @@ Route::get('public', function(){
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth_check')->group(function() {
     //chat public
@@ -41,3 +42,13 @@ Route::middleware('auth_check')->group(function() {
     Route::post('post-message-group', [HomeController::class, 'postMessageGroup'])->name('chat.postMessageGroup');
     Route::get('private-chat/{receiverId}/messages', [ChatController::class, 'getPrivateMessages'])->name('private.getPrivateMessages');
 });
+Route::get('/locale/{locale}', function (string $locale) {
+    if (! in_array($locale, ['en', 'vi', 'ja'])) {
+        abort(400);
+    }
+ 
+    App::setLocale($locale);
+ 
+    session(['locale' => $locale]);
+    return back();
+})->name('setLocale');

@@ -1,0 +1,21 @@
+{
+    "Hello": "Xin chào",
+    "Name": "Tên người dùng",
+    "Login": "Đăng nhập",
+    "Register": "Đăng ký",
+    "Logout": "Đăng xuất",
+    "Email Address": "Địa chỉ email",
+    "Password": "Mật khẩu",
+    "Remember Me": "Nhớ mật khẩu",
+    "Forgot Your Password?": "Quên mật khẩu?",
+    "Confirm Password": "Xác nhận mật khẩu",
+    "Dashboard":"Bảng điều khiển",
+    "You are logged in!":"Bạn đã đăng nhập!",
+    "Create Group": "Thêm nhóm",
+    "Group name": "Tên nhóm",
+    "Leader Group": "Tên trưởng nhóm",
+    "Member Group": "Tên thành viên nhóm",
+    "Close": "Đóng",
+    "Your team": "Nhóm của bạn",
+    "Group you are a member of": "Nhóm bạn là thành viên"
+}

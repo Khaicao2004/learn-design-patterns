@@ -15,6 +15,9 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     @yield('style')
 </head>
 <body>
@@ -68,6 +71,33 @@
                                 </div>
                             </li>
                         @endguest
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                  🌐 {{ strtoupper(app()->getLocale()) }}
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                  <li>
+                                    <a class="dropdown-item {{ app()->getLocale() === 'en' ? 'active fw-bold text-white' : '' }}"
+                                       href="{{ route('setLocale', 'en') }}">
+                                       🇬🇧 English
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a class="dropdown-item {{ app()->getLocale() === 'vi' ? 'active fw-bold text-white' : '' }}"
+                                       href="{{ route('setLocale', 'vi') }}">
+                                      🇻🇳 Tiếng Việt
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a class="dropdown-item {{ app()->getLocale() === 'ja' ? 'active fw-bold text-white' : '' }}"
+                                       href="{{ route('setLocale', 'ja') }}">
+                                      🇯🇵 日本語
+                                    </a>
+                                  </li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
